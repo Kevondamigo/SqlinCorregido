@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Adeudos</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <script src="js/fingerprint-manager.js"></script>
+    <script src="js/admin-protection.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .list-card {
+            background: white;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .list-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 300;
+            font-size: 2.5em;
+        }
+        .loading {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1.1em;
+        }
+        .error {
+            text-align: center;
+            color: #721c24;
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .volver-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background: white;
+            color: #125baf;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .volver-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .monto {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        #debug {
+            margin: 20px auto;
+            padding: 10px;
+            max-width: 450px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Adeudos</h1>
+        <div id="lista">
+            <div class="loading">Cargando adeudos...</div>
+        </div>
+        <a href="index.html" class="volver-btn">Volver al Inicio</a>
+    </div>
+
+    <script>
+    // Referencias a Firebase
+    const adeudosRef = firebase.database().ref('adeudos');
+    const debug = document.getElementById('debug');    // Obtener adeudos en tiempo real
+    adeudosRef.on('value', (snapshot) => {
+      const cont = document.getElementById('lista');
+      const adeudos = snapshot.val();
+
+      if (!adeudos) {
+        cont.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: white;">
+            <p style="font-style: italic;">No hay adeudos registrados.</p>
+          </div>`;
+        return;
+      }
+
+      // Ordenar adeudos por fecha (más recientes primero)
+      const adeudosOrdenados = Object.entries(adeudos)
+        .sort(([,a], [,b]) => new Date(b.fecha_registro || b.fecha_adeudo) - new Date(a.fecha_registro || a.fecha_adeudo));
+
+      cont.innerHTML = ''; // Limpiar mensaje de carga
+
+      for (const [key, adeudo] of adeudosOrdenados) {
+        const fechaAdeudo = new Date(adeudo.fecha_adeudo || adeudo.fecha_registro).toLocaleDateString();
+        
+        // Crear tarjeta de adeudo
+        const card = document.createElement('div');
+        card.className = 'list-card';
+        
+        // Determinar el estado visual
+        let estadoColor = adeudo.estado === 'pagado' ? '#28a745' : '#dc3545';
+        let estadoBg = adeudo.estado === 'pagado' ? '#d4edda' : '#f8d7da';
+        
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+            <h3 style="margin: 0; color: #125baf;">${adeudo.nombre_alumno || 'Alumno'}</h3>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <select class="estado-select" data-key="${key}" data-matricula="${adeudo.matricula_alumno}" style="padding: 4px; border-radius: 4px; border: 1px solid #ddd;">
+                <option value="pendiente" ${adeudo.estado !== 'pagado' ? 'selected' : ''}>Pendiente</option>
+                <option value="pagado" ${adeudo.estado === 'pagado' ? 'selected' : ''}>Pagado</option>
+              </select>
+              <span style="background: ${estadoBg}; color: ${estadoColor}; padding: 4px 8px; border-radius: 4px; font-size: 0.9em;">
+                ${(adeudo.estado || 'PENDIENTE').toUpperCase()}
+              </span>
+            </div>
+          </div>
+          <div style="display: grid; gap: 8px;">
+            <div><strong>Alumno:</strong> ${adeudo.nombre_alumno}</div>
+            <div><strong>Fecha:</strong> ${fechaAdeudo}</div>
+            <div class="monto">$${adeudo.monto} MXN</div>
+          </div>
+        `;
+        cont.appendChild(card);
+      }
+    }, (error) => {
+      console.error('Error:', error);
+      document.getElementById('lista').innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+          <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; display: inline-block;">
+            <p style="margin: 0;">Error al cargar los adeudos</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.9em;">${error.message}</p>
+          </div>
+        </div>`;
+    });
+
+    // Event listener para cambios de estado
+    document.addEventListener('change', async function(e) {
+      if (e.target.classList.contains('estado-select')) {
+        const key = e.target.dataset.key;
+        const nuevoEstado = e.target.value;
+        const matricula = parseInt(e.target.dataset.matricula);
+
+        try {
+          // Obtener datos del adeudo
+          const adeudoRef = firebase.database().ref(`adeudos/${key}`);
+          const adeudoSnapshot = await adeudoRef.once('value');
+          const adeudo = adeudoSnapshot.val();
+
+          // Actualizar estado
+          await adeudoRef.update({
+            estado: nuevoEstado,
+            fecha_actualizacion: new Date().toISOString()
+          });
+
+          // Obtener datos del alumno para la notificación
+          const alumnoSnapshot = await firebase.database()
+            .ref('alumno')
+            .orderByChild('matricula')
+            .equalTo(matricula)
+            .once('value');
+
+          if (alumnoSnapshot.exists()) {
+            const alumnoData = Object.values(alumnoSnapshot.val())[0];
+            const correo = alumnoData.correo;
+
+            // Preparar mensaje
+            const asunto = `Estado de adeudo actualizado`;
+            let mensaje = `Estimado/a ${adeudo.nombre_alumno},\n\n`;
+            mensaje += `Le informamos que el estado de su adeudo por $${adeudo.monto} MXN `;
+            mensaje += `ha sido actualizado a "${nuevoEstado.toUpperCase()}".\n\n`;
+            
+            if (nuevoEstado === 'pagado') {
+              mensaje += `¡Gracias por realizar su pago!`;
+            } else {
+              mensaje += `Por favor, realice el pago lo antes posible.`;
+            }
+            
+            mensaje += `\n\nAtentamente,\nAdministración UL Saneza`;
+
+            // Enviar notificación
+            const response = await fetch('/api/send-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                correo: correo,
+                asunto: asunto,
+                mensaje: mensaje
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Error al enviar la notificación');
+            }
+
+            alert('Estado actualizado y notificación enviada correctamente');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al actualizar el estado: ' + error.message);
+        }
+      }
+    });
+    </script>
+</body>
+</html>
