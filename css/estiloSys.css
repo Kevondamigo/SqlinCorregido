@@ -1,0 +1,184 @@
+/*---------------------------------------
+  CUSTOM PROPERTIES ( VARIABLES )             
+-----------------------------------------*/
+:root {
+  --white-color:                  #ffffff;
+  --primary-color:                #13547a;
+  --secondary-color:              #80d0c7;
+  --section-bg-color:             #f0f8ff;
+  --custom-btn-bg-color:          #80d0c7;
+  --custom-btn-bg-hover-color:    #13547a;
+  --dark-color:                   #000000;
+  --p-color:                      #717275;
+  --border-color:                 #7fffd4;
+  --link-hover-color:             rgb(106, 203, 233);
+
+  --body-font-family:             'Open Sans', sans-serif;
+  --title-font-family:            'Montserrat', sans-serif;
+
+  --h1-font-size:                 58px;
+  --h2-font-size:                 46px;
+  --h3-font-size:                 32px;
+  --h4-font-size:                 28px;
+  --h5-font-size:                 24px;
+  --h6-font-size:                 22px;
+  --p-font-size:                  20px;
+  --menu-font-size:               14px;
+  --btn-font-size:                18px;
+  --copyright-font-size:          16px;
+
+  --border-radius-large:          100px;
+  --border-radius-medium:         20px;
+  --border-radius-small:          10px;
+
+  --font-weight-normal:           400;
+  --font-weight-medium:           500;
+  --font-weight-semibold:         600;
+  --font-weight-bold:             700;
+}
+
+body { /* Fondo de las paginas y espaciado, tambien fuentes*/
+  background-image: linear-gradient(15deg, #b41408 0%, #003a5c 100%);
+      min-height: 100vh;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container { /* Contenedor principal para centrar el contenido */
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.list-card { /* Estilo de las tarjetas de la lista */
+    background: white; /* Fondo blanco para las tarjetas */
+    margin: 15px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-card:hover { /* Efecto al pasar el mouse sobre las tarjetas */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(148, 140, 58, 0.884); /* Sombra más pronunciada al pasar el mouse */
+}
+
+h1 {
+    color: white; /* Color del título principal Lista de Prestamos*/
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 300;
+    font-size: 2.5em;
+}
+
+.loading { /* Estilo para el mensaje de carga */
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 1.1em;
+}
+.volver-btn { /* Botón para volver a la página principal */
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 12px 25px;
+    background: rgb(2, 7, 56);
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.volver-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(170, 159, 56, 0.404);
+}
+.monto {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+
+/*---------------------------------------
+  TYPOGRAPHY               
+-----------------------------------------*/
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--dark-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--title-font-family); 
+  font-weight: var(--font-weight-semibold);
+}
+
+h1 {
+  font-size: var(--h1-font-size);
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: var(--h2-font-size);
+  font-weight: var(--font-weight-bold);
+}
+
+h3 {
+  font-size: var(--h3-font-size);
+}
+
+h4 {
+  font-size: var(--h4-font-size);
+}
+
+h5 {
+  font-size: var(--h5-font-size);
+}
+
+h6 {
+  color: var(--primary-color);
+  font-size: var(--h6-font-size);
+}
+
+p {
+  color: var(--p-color);
+  font-size: var(--p-font-size);
+  font-weight: var(--font-weight-normal);
+}
+
+ul li {
+  color: var(--p-color);
+  font-size: var(--p-font-size);
+  font-weight: var(--font-weight-normal);
+}
+
+a, 
+button {
+  touch-action: manipulation;
+  transition: all 0.3s;
+}
+
+a {
+  display: inline-block;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+}
+
+b,
+strong {
+  font-weight: var(--font-weight-bold);
+}
