@@ -1126,7 +1126,7 @@ blockquote {
   }
   
   .navbar {
-    background-color: var(--secondary-color);
+    background-color: rgba(1, 1, 85, 0);
   }
 
   .navbar-nav .dropdown-menu {
