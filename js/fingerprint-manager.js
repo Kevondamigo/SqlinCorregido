@@ -1,7 +1,7 @@
 // Lista de visitor IDs de administradores
 const adminVisitorIds = [
     //'bc05714a6d6450c967d28e560d62aeaa',
-    
+    '429149680c8acf62b1b84f82f3e924a0'
     // Para agregar más IDs, agrégalos así:
     // 'otro-id-aqui',
     // 'otro-id-mas'

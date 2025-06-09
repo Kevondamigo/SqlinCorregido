@@ -40,6 +40,20 @@
     <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" href="assets/css/styles.css">
 
+
+      <!-- 1) FingerprintJS SDK -->
+      <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js" defer></script>
+
+      <!-- 2) Tu manager de fingerprint -->
+      <script src="assets/js/fingerprint-manager.js" defer></script>
+
+      <!-- 4) Protección de admin -->
+      <script src="assets/js/admin-protect.js" defer></script>
+
+
+
+
+
   </head>
   <body>
     <div class="wrapper">
@@ -652,56 +666,58 @@
                 </li>
 
                 <li class="nav-item topbar-user dropdown hidden-caret">
-                  <a
-                    class="dropdown-toggle profile-pic"
-                    data-bs-toggle="dropdown"
-                    href="#"
-                    aria-expanded="false"
-                  >
-                    <div class="avatar-sm">
-                      <img
-                        src="assets/img/profile.jpg"
-                        alt="..."
-                        class="avatar-img rounded-circle"
-                      />
-                    </div>
-                    <span class="profile-username">
-                      <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Hizrian</span>
-                    </span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-user animated fadeIn">
-                    <div class="dropdown-user-scroll scrollbar-outer">
-                      <li>
-                        <div class="user-box">
-                          <div class="avatar-lg">
-                            <img
-                              src="assets/img/profile.jpg"
-                              alt="image profile"
-                              class="avatar-img rounded"
-                            />
-                          </div>
-                          <div class="u-text">
-                            <h4>Hizrian</h4>
-                            <p class="text-muted">hello@example.com</p>
-                            <a
-                              href="profile.html"
-                              class="btn btn-xs btn-secondary btn-sm"
-                              >View Profile</a
-                            >
-                          </div>
+                <a
+                  id="userDropdownToggle"
+                  class="dropdown-toggle profile-pic"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  aria-expanded="false"
+                >
+                  <div class="avatar-sm">
+                    <img
+                      id="userAvatarSmall"
+                      src="assets/img/profile.jpg"
+                      alt="avatar"
+                      class="avatar-img rounded-circle"
+                    />
+                  </div>
+                  <span class="profile-username">
+                    <span class="op-7">Hola,</span>
+                    <span id="userDisplayName" class="fw-bold">Usuario</span>
+                  </span>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated fadeIn" aria-labelledby="userDropdownToggle">
+                  <div class="dropdown-user-scroll scrollbar-outer">
+                    <li>
+                      <div class="user-box text-center">
+                        <div class="avatar-lg mb-2">
+                          <img
+                            id="userAvatarLarge"
+                            src="assets/img/profile.jpg"
+                            alt="avatar grande"
+                            class="avatar-img rounded"
+                          />
                         </div>
-                      </li>
-                      <li>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My Balance</a>
-                        <a class="dropdown-item" href="#">Inbox</a>
-                        <div class="dropdown-divider"></div>  
-                        <a class="dropdown-item" href="#">Logout</a>
-                      </li>
-                    </div>
-                  </ul>
-                </li>
+                        <div class="u-text">
+                          <h4 id="userNameLarge">Usuario</h4>
+                          <p id="userEmail" class="text-muted">email@ejemplo.com</p>
+                          <a
+                            href="#"
+                            id="viewProfileBtn"
+                            class="btn btn-xs btn-secondary btn-sm"
+                            >Ver Perfil</a
+                          >
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                      <!-- Opciones adicionales… -->
+                      <a class="dropdown-item" href="index.html" id="logoutBtn">Cerrar Sesión</a>
+                    </li>
+                  </div>
+                </ul>
+              </li>
               </ul>
             </div>
           </nav>
